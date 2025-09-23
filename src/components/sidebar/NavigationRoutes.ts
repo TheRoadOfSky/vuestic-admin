@@ -26,6 +26,13 @@ export default {
       },
     },
     {
+      name: 'bundle-detail-viewer',
+      displayName: 'Bundle 详情',
+      meta: {
+        icon: 'description',
+      },
+    },
+    {
       name: 'users',
       displayName: 'menu.users',
       meta: {
