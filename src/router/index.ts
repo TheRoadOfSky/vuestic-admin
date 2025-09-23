@@ -22,6 +22,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/admin/dashboard/Dashboard.vue'),
       },
       {
+        name: 'bundle-viewer',
+        path: 'bundle-viewer',
+        component: () => import('../pages/bundle-viewer/BundleViewer.vue'),
+      },
+      {
         name: 'settings',
         path: 'settings',
         component: () => import('../pages/settings/Settings.vue'),

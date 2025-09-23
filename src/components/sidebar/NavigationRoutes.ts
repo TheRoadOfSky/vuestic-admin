@@ -19,6 +19,13 @@ export default {
       },
     },
     {
+      name: 'bundle-viewer',
+      displayName: 'Bundle Viewer',
+      meta: {
+        icon: 'view_list',
+      },
+    },
+    {
       name: 'users',
       displayName: 'menu.users',
       meta: {
