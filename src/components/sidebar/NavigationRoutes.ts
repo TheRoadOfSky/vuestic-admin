@@ -33,6 +33,13 @@ export default {
       },
     },
     {
+      name: 'asset-lookup',
+      displayName: 'Asset 查找',
+      meta: {
+        icon: 'search',
+      },
+    },
+    {
       name: 'users',
       displayName: 'menu.users',
       meta: {

@@ -3,7 +3,7 @@
     <h1 class="page-title">Bundle 内容查看器</h1>
 
     <div class="mb-4">
-      <VaInput v-model="searchQuery" placeholder="搜索 Bundle Hash 或 Asset..." class="mr-2" style="width: 300px" />
+      <VaInput v-model="searchQuery" placeholder="搜索 Bundle Hash、GUID 或 CRC..." class="mr-2" style="width: 300px" />
     </div>
 
     <VaCard>
@@ -135,14 +135,22 @@ const filteredBundles = computed(() => {
 
   return bundlesArray
     .filter((bundle) => {
-      // 检查是否匹配 hash 或文件路径
+      // 检查是否匹配 hash
       const hashMatch = bundle.hash.toLowerCase().includes(query)
 
+      // 检查是否匹配 crc
+      const crcMatch = bundle.crc && bundle.crc.toLowerCase().includes(query)
+
+      // 检查是否匹配文件路径
       const fileMatch =
         bundle.files &&
         bundle.files.some((file: any) => file && file.asset_path && file.asset_path.toLowerCase().includes(query))
 
-      return hashMatch || fileMatch
+      // 检查是否匹配 GUID
+      const guidMatch =
+        bundle.files && bundle.files.some((file: any) => file && file.guid && file.guid.toLowerCase().includes(query))
+
+      return hashMatch || crcMatch || fileMatch || guidMatch
     })
     .map((bundle) => ({
       hash: bundle.hash,

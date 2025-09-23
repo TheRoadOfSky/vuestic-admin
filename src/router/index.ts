@@ -32,6 +32,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/bundle-viewer/BundleDetailViewer.vue'),
       },
       {
+        name: 'asset-lookup',
+        path: 'asset-lookup',
+        component: () => import('../pages/bundle-viewer/AssetLookup.vue'),
+      },
+      {
         name: 'settings',
         path: 'settings',
         component: () => import('../pages/settings/Settings.vue'),

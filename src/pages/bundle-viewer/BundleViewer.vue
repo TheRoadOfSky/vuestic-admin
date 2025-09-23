@@ -3,7 +3,12 @@
     <h1 class="page-title">Asset-Packer 依赖查看器</h1>
 
     <div class="mb-4">
-      <VaInput v-model="searchQuery" placeholder="搜索 Asset/Bundle/GUID..." class="mr-2" style="width: 300px" />
+      <VaInput
+        v-model="searchQuery"
+        placeholder="搜索 Asset 路径、Bundle Hash 或 GUID..."
+        class="mr-2"
+        style="width: 300px"
+      />
       <VaButton @click="loadOldJson">加载旧日志对比</VaButton>
       <input ref="fileInput" type="file" accept=".json" style="display: none" @change="handleFileSelect" />
     </div>
@@ -148,8 +153,48 @@ const filteredAssets = computed(() => {
   const assets = Object.keys(jsonData.value.assets)
   const query = searchQuery.value.toLowerCase()
 
+  if (!query) {
+    return assets.map((asset) => ({
+      asset,
+      bundleCount: Object.keys(jsonData.value!.assets[asset]).length,
+    }))
+  }
+
   return assets
-    .filter((asset) => asset.toLowerCase().includes(query))
+    .filter((asset) => {
+      // 检查 asset 路径
+      if (asset.toLowerCase().includes(query)) {
+        return true
+      }
+
+      // 检查该 asset 依赖的 bundles 和 guids
+      const bundles = jsonData.value.assets[asset]
+      for (const bundleHash in bundles) {
+        // 检查 bundle hash
+        if (bundleHash.toLowerCase().includes(query)) {
+          return true
+        }
+
+        // 检查 guids
+        const guids = bundles[bundleHash]
+        if (guids.some((guid: string) => guid.toLowerCase().includes(query))) {
+          return true
+        }
+
+        // 检查每个 guid 对应的 asset path
+        for (const guid of guids) {
+          const bundleData = jsonData.value.bundles[bundleHash]
+          if (bundleData && bundleData.files) {
+            const file = bundleData.files.find((f: any) => f.guid === guid)
+            if (file && file.asset_path && file.asset_path.toLowerCase().includes(query)) {
+              return true
+            }
+          }
+        }
+      }
+
+      return false
+    })
     .map((asset) => ({
       asset,
       bundleCount: Object.keys(jsonData.value!.assets[asset]).length,
