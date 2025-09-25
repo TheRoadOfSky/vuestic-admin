@@ -186,7 +186,7 @@ const filteredAssets = computed(() => {
           const bundleData = jsonData.value.bundles[bundleHash]
           if (bundleData && bundleData.files) {
             const file = bundleData.files.find((f: any) => f.guid === guid)
-            if (file && file.asset_path && file.asset_path.toLowerCase().includes(query)) {
+            if (file && file.assetPath && file.assetPath.toLowerCase().includes(query)) {
               return true
             }
           }
@@ -248,7 +248,7 @@ const showBundles = (rowData: any) => {
         const file = bundleData.files.find((f: any) => f.guid === guid)
         return {
           guid,
-          assetPath: file ? file.asset_path : 'Unknown',
+          assetPath: file ? file.assetPath : 'Unknown',
         }
       }
       return {

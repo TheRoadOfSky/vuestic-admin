@@ -65,7 +65,7 @@ const bundleColumns = [
 ]
 
 const fileColumns = [
-  { key: 'asset_path', label: 'Asset 路径', sortable: true },
+  { key: 'assetPath', label: 'Asset 路径', sortable: true },
   { key: 'guid', label: 'GUID', sortable: true },
   {
     key: 'size',
@@ -144,7 +144,7 @@ const filteredBundles = computed(() => {
       // 检查是否匹配文件路径
       const fileMatch =
         bundle.files &&
-        bundle.files.some((file: any) => file && file.asset_path && file.asset_path.toLowerCase().includes(query))
+        bundle.files.some((file: any) => file && file.assetPath && file.assetPath.toLowerCase().includes(query))
 
       // 检查是否匹配 GUID
       const guidMatch =
@@ -190,7 +190,7 @@ const selectedBundleFiles = computed(() => {
 const filteredBundleFiles = computed(() => {
   const query = fileSearchQuery.value.toLowerCase()
   return selectedBundleFiles.value.filter(
-    (file: any) => file.asset_path.toLowerCase().includes(query) || file.guid.toLowerCase().includes(query),
+    (file: any) => file.assetPath.toLowerCase().includes(query) || file.guid.toLowerCase().includes(query),
   )
 })
 

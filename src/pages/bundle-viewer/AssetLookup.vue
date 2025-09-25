@@ -113,9 +113,9 @@ const buildAssetToBundleMap = () => {
 
     if (bundle.files && Array.isArray(bundle.files)) {
       bundle.files.forEach((file: any) => {
-        if (file.asset_path) {
+        if (file.assetPath) {
           assetToBundleMap.push({
-            assetPath: file.asset_path,
+            assetPath: file.assetPath,
             bundleHash: bundleHash,
             guid: file.guid || '',
             fileSize: file.size || 0,
