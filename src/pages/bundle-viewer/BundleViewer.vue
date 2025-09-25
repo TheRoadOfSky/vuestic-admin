@@ -9,8 +9,6 @@
         class="mr-2"
         style="width: 300px"
       />
-      <VaButton @click="loadOldJson">加载旧日志对比</VaButton>
-      <input ref="fileInput" type="file" accept=".json" style="display: none" @change="handleFileSelect" />
     </div>
 
     <VaCard>
@@ -56,14 +54,6 @@
         </div>
       </div>
     </VaModal>
-
-    <!-- Compare Result Modal -->
-    <VaModal v-model="showCompareResult" hide-default-actions size="large">
-      <template #header>
-        <h3>对比结果</h3>
-      </template>
-      <pre>{{ compareResult }}</pre>
-    </VaModal>
   </div>
 </template>
 
@@ -74,7 +64,6 @@ import { VaCard, VaCardContent, VaDataTable, VaInput, VaButton, VaModal } from '
 // 数据状态
 const loading = ref(true)
 const jsonData = ref<any>(null)
-const oldJsonData = ref<any>(null)
 
 // 搜索和过滤
 const searchQuery = ref('')
@@ -86,12 +75,6 @@ const selectedAsset = ref('')
 
 // Bundle 详情数据
 const bundleDetailItems = ref<any[]>([])
-
-const showCompareResult = ref(false)
-const compareResult = ref('')
-
-// 文件输入引用
-const fileInput = ref<HTMLInputElement | null>(null)
 
 // 表格列定义
 const assetColumns = [
@@ -265,69 +248,6 @@ const showBundles = (rowData: any) => {
 
   bundleDetailItems.value = items
   showBundleDetail.value = true
-}
-
-// 加载旧 JSON 文件
-const loadOldJson = () => {
-  if (fileInput.value) {
-    fileInput.value.click()
-  }
-}
-
-// 处理文件选择
-const handleFileSelect = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  const file = target.files?.[0]
-
-  if (!file) return
-
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    try {
-      const rawData = JSON.parse(e.target?.result as string)
-      oldJsonData.value = normalizeData(rawData)
-      performCompare()
-    } catch (error) {
-      console.error('Failed to parse old JSON:', error)
-    }
-  }
-  reader.readAsText(file)
-}
-
-// 执行对比
-const performCompare = () => {
-  if (!jsonData.value || !oldJsonData.value) return
-
-  const changes: any = { addedAssets: [], removedAssets: [], bundleChanges: {} }
-
-  // 对比 Assets
-  Object.keys(jsonData.value.assets).forEach((asset) => {
-    if (!oldJsonData.value.assets[asset]) changes.addedAssets.push(asset)
-  })
-
-  Object.keys(oldJsonData.value.assets).forEach((asset) => {
-    if (!jsonData.value.assets[asset]) changes.removedAssets.push(asset)
-  })
-
-  // 对比 Bundles
-  Object.keys(jsonData.value.bundles).forEach((bundle) => {
-    if (!oldJsonData.value.bundles[bundle]) {
-      changes.bundleChanges[bundle] = { status: 'added', files: jsonData.value.bundles[bundle].files }
-    } else if (
-      JSON.stringify(jsonData.value.bundles[bundle].files) !== JSON.stringify(oldJsonData.value.bundles[bundle].files)
-    ) {
-      changes.bundleChanges[bundle] = { status: 'modified', files: jsonData.value.bundles[bundle].files }
-    }
-  })
-
-  Object.keys(oldJsonData.value.bundles).forEach((bundle) => {
-    if (!jsonData.value.bundles[bundle]) {
-      changes.bundleChanges[bundle] = { status: 'removed' }
-    }
-  })
-
-  compareResult.value = JSON.stringify(changes, null, 2)
-  showCompareResult.value = true
 }
 
 // 组件挂载时获取数据

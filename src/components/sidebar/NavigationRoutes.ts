@@ -39,5 +39,12 @@ export default {
         icon: 'manage_search',
       },
     },
+    {
+      name: 'log-comparison',
+      displayName: '日志对比',
+      meta: {
+        icon: 'compare',
+      },
+    },
   ] as INavigationRoute[],
 }

@@ -37,6 +37,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/bundle-viewer/AssetLookup.vue'),
       },
       {
+        name: 'log-comparison',
+        path: 'log-comparison',
+        component: () => import('../pages/bundle-viewer/LogComparison.vue'),
+      },
+      {
         name: 'settings',
         path: 'settings',
         component: () => import('../pages/settings/Settings.vue'),
